@@ -421,7 +421,7 @@ async function countProject (path, folderName, fileType = ['*']) {
 console.time('count')
 // countProject('./', ['vue', 'js', 'scss', 'css', '.']).then(data => {
 countProject(repositoryPath, repositoryName, ['*']).then(data => {
-    let json = JSON.stringify(data, null, 2)
+    let json = 'window._source = ' + JSON.stringify(data, null, 2)
     let file = '_source.js'
     let targetPath = path.resolve(repositoryPath + '/commit-analyze/') + '/'
 
