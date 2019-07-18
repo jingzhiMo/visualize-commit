@@ -3,29 +3,21 @@ const path = require('path')
 const fs = require('fs')
 const exec = require('child_process').exec
 const copyFolder = require('fs-extra').copySync
+// 当前执行的路径
+const CURRENT_PATH = process.cwd()
+// 仓库名称
+const REPO_NAME = CURRENT_PATH.split('/').reverse()[0]
+
+// 进入用户文件夹的命令
+const CD_COMMAND = CURRENT_PATH === __dirname ? '' : `cd ${CURRENT_PATH} && `
 
 console.log('__dirname', __dirname)
 
-let repositoryName
-let repositoryPath
-
-// 当前运行环境在node bin 下
-if (__dirname.includes('node_modules')) {
-    let pathArr = __dirname.split('node_modules')
-    repositoryName= path.basename(pathArr[0])
-    repositoryPath = pathArr[0]
-
-    console.log('repositoryName', repositoryName)
-    console.log('repositoryPath', repositoryPath)
-} else {
-    return
-}
+console.log('pwd', process.cwd())
 
 
 // 需要剔除的关键词
 const EXCLUDE_PATTERN = [
-    'assets',
-    'style/theme',
     'package-lock.json',
     'yarn.lock',
     // 忽略图片与办公软件等
@@ -56,6 +48,10 @@ function isRegExp (p) {
     return Object.prototype.toString.call(p).toLowerCase() === '[object regexp]'
 }
 
+/**
+ *  @desc  删除文件夹
+ *  @param  {String}  path  需要删除文件夹的路径
+ */
 function rmdir (path) {
   if (path[path.length - 1] !== '/') path = path + '/'
 
@@ -117,7 +113,7 @@ function breadthReadFile (path) {
 
 // console.log(depthReadFile('./src/views/'))
 // console.log(breadthReadFile('./src/views/'))
-async function count (fileFormat) {
+function count (fileFormat) {
     return new Promise((resolve, reject) => {
         exec(`cat ${fileFormat} | wc -l`, (err, data) => {
             if (err) {
@@ -136,11 +132,11 @@ async function count (fileFormat) {
 }
 
 // 统计文件的 git 提交行数
-async function countGitContribution (fileName) {
+function countGitContribution (fileName) {
     // command line
     // git ls-files | while read f; do git blame --line-porcelain $f | grep '^author '; done | sort -f | uniq -ic | sort -n
     return new Promise((resolve, reject) => {
-        exec(`git ls-files ${fileName} | while read f; do git blame --line-porcelain $f | grep '^author '; done | sort -f | uniq -ic | sort -n`, function (err, data) {
+        exec(`${CD_COMMAND}git ls-files ${fileName} | while read f; do git blame --line-porcelain $f | grep '^author '; done | sort -f | uniq -ic | sort -n`, function (err, data) {
             if (err) {
                 reject(err)
                 return
@@ -229,14 +225,15 @@ function isValidFile (file, fileType) {
  */
 function isGitTrack (file) {
     return new Promise((resolve, reject) => {
-        exec(`git ls-files ${file}`, (err, data) => {
+        exec(`${CD_COMMAND}git ls-files ${file}`, (err, data) => {
             if (err) {
                 reject(err)
                 return
             }
 
             if (!data) {
-                console.log(`${file} file is not track`)
+                // TODO need to write log
+                // console.log(`${file} file is not track`)
             }
 
             resolve(!!data)
@@ -419,11 +416,12 @@ async function countProject (path, folderName, fileType = ['*']) {
 }
 
 console.time('count')
+console.log('analyzing...')
 // countProject('./', ['vue', 'js', 'scss', 'css', '.']).then(data => {
-countProject(repositoryPath, repositoryName, ['*']).then(data => {
+countProject(CURRENT_PATH + '/', REPO_NAME, ['*']).then(data => {
     let json = 'window._source = ' + JSON.stringify(data, null, 2)
     let file = '_source.js'
-    let targetPath = path.resolve(repositoryPath + '/commit-analyze/') + '/'
+    let targetPath = CURRENT_PATH + '/commit-analyze/'
 
     // 判断是否存在，存在则删除
     if (fs.existsSync(targetPath)) {
@@ -440,6 +438,7 @@ countProject(repositoryPath, repositoryName, ['*']).then(data => {
         }
 
         console.timeEnd('count')
+        console.log('succesful!')
     })
 })
 
