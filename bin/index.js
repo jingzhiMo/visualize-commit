@@ -11,11 +11,6 @@ const REPO_NAME = CURRENT_PATH.split('/').reverse()[0]
 // 进入用户文件夹的命令
 const CD_COMMAND = CURRENT_PATH === __dirname ? '' : `cd ${CURRENT_PATH} && `
 
-console.log('__dirname', __dirname)
-
-console.log('pwd', process.cwd())
-
-
 // 需要剔除的关键词
 const EXCLUDE_PATTERN = [
     'package-lock.json',
