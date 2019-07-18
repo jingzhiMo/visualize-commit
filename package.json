@@ -7,7 +7,15 @@
     "vsz-commit": "./bin/index.js"
   },
   "author": "mojingzhi",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jingzhiMo/visualize-commit.git"
+  },
+  "keywords": [
+    "git",
+    "data visualize"
+  ],
+  "license": "MIT",
   "dependencies": {
     "fs-extra": "^8.1.0"
   },
