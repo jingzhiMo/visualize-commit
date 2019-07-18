@@ -2,6 +2,7 @@
 const path = require('path')
 const fs = require('fs')
 const exec = require('child_process').exec
+const copyFolder = require('fs-extra').copySync
 
 console.log('__dirname', __dirname)
 
@@ -16,7 +17,6 @@ if (__dirname.includes('node_modules')) {
 
     console.log('repositoryName', repositoryName)
     console.log('repositoryPath', repositoryPath)
-    // return
 } else {
     return
 }
@@ -54,6 +54,25 @@ function isString (str) {
 
 function isRegExp (p) {
     return Object.prototype.toString.call(p).toLowerCase() === '[object regexp]'
+}
+
+function rmdir (path) {
+  if (path[path.length - 1] !== '/') path = path + '/'
+
+  let allFile = fs.readdirSync(path)
+
+  allFile.forEach(file => {
+    file = path + file
+
+    if (isFile(file)) {
+      fs.unlinkSync(file)
+    } else {
+      rmdir(file + '/')
+    }
+  })
+
+  // 删除当前文件夹
+  fs.rmdirSync(path)
 }
 
 function depthReadFile (path) {
@@ -403,15 +422,24 @@ console.time('count')
 // countProject('./', ['vue', 'js', 'scss', 'css', '.']).then(data => {
 countProject(repositoryPath, repositoryName, ['*']).then(data => {
     let json = JSON.stringify(data, null, 2)
-    let file = 'code-count.json'
+    let file = '_source.js'
+    let targetPath = path.resolve(repositoryPath + '/commit-analyze/') + '/'
 
-    fs.writeFile(file, json, 'utf-8', (err, data) => {
+    // 判断是否存在，存在则删除
+    if (fs.existsSync(targetPath)) {
+       rmdir(targetPath)
+    }
+
+    // 复制 html 等文件
+    copyFolder(path.resolve(__dirname + '/../build'), targetPath)
+
+    // 写入统计文件
+    fs.writeFile(targetPath + file, json, 'utf-8', (err, data) => {
         if (err) {
             throw new Error('write file error', err)
         }
 
         console.timeEnd('count')
-        console.log(`write ${file} successful!`)
     })
 })
 
