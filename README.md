@@ -5,7 +5,7 @@
 
 * 使用 npx 命令生成
 
-```bash 
+```bash
 $ cd git-repository /* 进入需要统计的 git 仓库文件夹 */
 $ npx visualize-commit
 $ cd commit-analyze /* 打开文件夹的 index.html 文件即可 */
@@ -15,15 +15,10 @@ $ cd commit-analyze /* 打开文件夹的 index.html 文件即可 */
 
 ```bash
 $ cd git-repository
-$ npm install visualize-commit --save-dev 
-```
-
-or
-
-```
+$ npm install visualize-commit --save-dev
+# or
 $ yarn add visualize-commit --dev
 ```
-
 
 在`package.json`加入对应的脚本：
 
@@ -38,13 +33,17 @@ $ yarn add visualize-commit --dev
 执行命令：
 
 ```bash
-$ npm run vsz  /  yarn add vsz
+$ npm run vsz
+# or
+$ yarn add vsz
 $ cd commit-analyze /* 打开文件夹的 index.html 文件即可 */
 ```
 
 ## 依赖环境
 
-* node > 8 (支持 async function) 建议安装最新稳定版 node 版本 
+* node > 8 (支持 async function) 建议安装最新稳定版 node 版本
+* npx (建议安装，通常 npm 5.2.0 版本之后会自动安装)
+* git
 
 ## 统计截图
 文件类型
