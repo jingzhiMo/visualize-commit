@@ -133,7 +133,6 @@ class App extends React.Component {
   }
 
   toggleCollapse (id, ev) {
-    console.log('toggleCollapse', id)
     ev.stopPropagation()
   }
 
@@ -153,12 +152,10 @@ class App extends React.Component {
         <img className="t-logo loading" src={logo} alt="logo" />
         <div className="pieArea">
           <Echarts
-            clickTime={1}
             chartData={extractContribution(this.state.treeData)}
             title="代码贡献占比"
           />
           <Echarts
-            clickTime={1}
             chartData={extractFileType(this.state.treeData)}
             title="文件数量占比"
           />
