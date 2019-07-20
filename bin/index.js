@@ -66,48 +66,6 @@ function rmdir (path) {
   fs.rmdirSync(path)
 }
 
-function depthReadFile (path) {
-    var allFile = fs.readdirSync(path)
-    var fileList = []
-
-    allFile.forEach(file => {
-        file = path + file
-        if (isFile(file)) {
-            fileList.push(file)
-            return
-        }
-        if (isFolder(file)) {
-            fileList = fileList.concat(depthReadFile(file + '/'))
-        }
-    })
-
-    return fileList
-}
-
-function breadthReadFile (path) {
-    var allFile = fs.readdirSync(path)
-    var fileList = []
-    var folderList = []
-
-    allFile.forEach(file => {
-        file = path + file
-
-        if (isFile(file)) {
-            fileList.push(file)
-        } else {
-            folderList.push(file)
-        }
-    })
-
-    folderList.forEach(folder => {
-        fileList = fileList.concat(breadthReadFile(folder + '/'))
-    })
-
-    return fileList
-}
-
-// console.log(depthReadFile('./src/views/'))
-// console.log(breadthReadFile('./src/views/'))
 function count (fileFormat) {
     return new Promise((resolve, reject) => {
         exec(`cat ${fileFormat} | wc -l`, (err, data) => {
