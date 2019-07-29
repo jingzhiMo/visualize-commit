@@ -2697,7 +2697,7 @@ commondir@^1.0.1:
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
   integrity sha1-3dgA2gxmEnOTzKWVDqloo6rxJTs=
 
-component-classes@1.x, component-classes@^1.2.6:
+component-classes@1.x, component-classes@^1.2.5, component-classes@^1.2.6:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/component-classes/-/component-classes-1.2.6.tgz#c642394c3618a4d8b0b8919efccbbd930e5cd691"
   integrity sha1-xkI5TDYYpNiwuJGe/Mu9kw5c1pE=
@@ -2955,11 +2955,12 @@ crypto-browserify@^3.11.0:
     randomfill "^1.0.3"
 
 css-animation@1.x, css-animation@^1.3.2, css-animation@^1.5.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/css-animation/-/css-animation-1.6.0.tgz#7d8b6b65c7301c17c46446240225abe9205fc3d1"
-  integrity sha512-ADautdbBBkz/xOyuDFB9eQ0hUGe7UrIRm7TPDIZGD/16qz5E3/56d1egqNv3gzzo1+Sy3dJcGjG3WhqLcq2Umw==
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/css-animation/-/css-animation-1.6.1.tgz#162064a3b0d51f958b7ff37b3d6d4de18e17039e"
+  integrity sha512-/48+/BaEaHRY6kNQ2OIPzKf9A6g8WjZYjhiNDNuIVbsm5tXCGIAsHDjB4Xu1C4vXJtUWZo26O68OQkDpNBaPog==
   dependencies:
-    component-classes "^1.2.6"
+    babel-runtime "6.x"
+    component-classes "^1.2.5"
 
 css-blank-pseudo@^0.1.4:
   version "0.1.4"
