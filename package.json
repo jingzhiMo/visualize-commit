@@ -43,9 +43,15 @@
   "homepage": "./",
   "devDependencies": {
     "antd": "^3.20.7",
+    "cz-conventional-changelog": "3.0.2",
     "echarts": "^4.2.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "^3.0.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
