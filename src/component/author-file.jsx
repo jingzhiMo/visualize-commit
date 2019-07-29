@@ -107,18 +107,15 @@ function AuthorFile (props) {
   const [selectAuthor, setSelectAuthor] = useState(allAuthorName[0])
 
   useEffect(() => {
-    console.log('effect all authorData')
     setAllAuthorData(extractAuthorFile(props.data))
   }, [props.data])
 
   useEffect(() => {
-    console.log('effect author data')
     setAllAuthorName(Object.keys(allAuthorData))
     setAuthorData(genAuthor(allAuthorData))
   }, [allAuthorData])
 
   useEffect(() => {
-    console.log('default author name', allAuthorName[0])
     setSelectAuthor(allAuthorName[0])
   }, [allAuthorName])
 
