@@ -130,6 +130,13 @@ body {
   padding-bottom: 40px;
 }
 
+.vsz-code-summary {
+  display: flex;
+}
+.vsz-code-summary__echart {
+  flex: 1 0 50%;
+}
+
 
 /* 标题相关*/
 .vsz-title {
@@ -146,6 +153,3 @@ body {
   line-height: 1;
   vertical-align: middle;
 }
-/*.vsz-author-detail {
-  padding: 0 24px;
-}*/

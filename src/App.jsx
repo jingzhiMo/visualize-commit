@@ -152,12 +152,14 @@ class App extends React.Component {
             <p className="t-code-line">该文件/文件夹代码行数为：{this.state.treeData.line}</p>
           </div>
         </div>
-        <div className="pieArea">
+        <div className="vsz-code-summary">
           <Echarts
+            clazz="vsz-code-summary__echart"
             chartData={extractContribution(this.state.treeData)}
             title="代码贡献占比"
           />
           <Echarts
+            clazz="vsz-code-summary__echart"
             chartData={extractFileType(this.state.treeData)}
             title="文件数量占比"
           />

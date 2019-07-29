@@ -51,7 +51,7 @@ function Echarts (props) {
     addInstance(instance)
   }
 
-  return <div>
+  return <div className={props.clazz}>
     <div className="echarts-container" ref={el => initRef(el)}>echart container</div>
     </div>
 }
