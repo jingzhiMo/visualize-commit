@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { pie } from './echart-option'
+import { pie } from '../service/echart-option'
 
 import echart from 'echarts/lib/echarts'
 import 'echarts/lib/component/tooltip'

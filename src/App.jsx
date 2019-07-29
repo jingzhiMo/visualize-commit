@@ -2,7 +2,7 @@ import React from 'react'
 import logo from './logo.svg'
 import './App.css'
 import Tree from './tree.jsx'
-import Echarts from './echarts.jsx'
+import Echarts from './component/echarts.jsx'
 import AuthorFile from './component/author-file.jsx'
 
 const source = window._source
