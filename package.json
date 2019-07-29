@@ -17,6 +17,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "antd": "^3.20.7",
     "fs-extra": "^8.1.0"
   },
   "scripts": {
