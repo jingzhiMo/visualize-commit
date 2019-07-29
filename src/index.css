@@ -51,6 +51,7 @@ body {
 }
 .tree-content {
     flex: 1 0 auto;
+    padding: 0 24px;
     overflow-y: auto;
 }
 @keyframes round {
@@ -67,6 +68,9 @@ body {
 }
 .t-logo.loading {
   animation: 1.5s round linear infinite;
+}
+.t-line {
+  display: flex;
 }
 
 /*树状节点*/
@@ -117,7 +121,6 @@ body {
 }
 /*代码行数的显示*/
 .t-code-line {
-  padding-left: 16px;
   color: #606266;
 }
 
@@ -126,3 +129,23 @@ body {
   height: 400px;
   padding-bottom: 40px;
 }
+
+
+/* 标题相关*/
+.vsz-title {
+  padding: 26px 0 20px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #5097e9;
+  text-align: left;
+}
+.vsz-title span {
+  display: inline-block;
+  border-left: 4px solid #5097e9;
+  padding-left: 4px;
+  line-height: 1;
+  vertical-align: middle;
+}
+/*.vsz-author-detail {
+  padding: 0 24px;
+}*/

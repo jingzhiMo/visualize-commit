@@ -1,8 +1,9 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import logo from './logo.svg'
+import './App.css'
 import Tree from './tree.jsx'
 import Echarts from './echarts.jsx'
+import AuthorFile from './component/author-file.jsx'
 
 const source = window._source
 
@@ -51,7 +52,7 @@ function depthFindFile (id, type, treeData) {
  *  @param  {Object}  detailData  当前文件夹的详细数据
  */
 function extractSummary (detailData) {
-  let key = ['code', 'contribution', 'file', 'id', 'line', 'name', 'path', 'type']
+  let key = ['code', 'contribution', 'file', 'id', 'line', 'name', 'path', 'type', 'children']
   let summary = {}
 
   key.forEach(k => {
@@ -116,9 +117,7 @@ class App extends React.Component {
   constructor () {
     super()
     this.selectNode = this.selectNode.bind(this)
-    this.toggleCollapse = this.toggleCollapse.bind(this)
     this.state = {
-      clickTime: 0,
       selectNodeId: 0,
       treeData: extractSummary(depthFindFile(0, 'folder', source))
     }
@@ -126,14 +125,9 @@ class App extends React.Component {
 
   selectNode (id, type) {
     this.setState({
-      clickTime: this.state.clickTime + 1,
       selectNodeId: id,
       treeData: extractSummary(depthFindFile(id, type, source))
     })
-  }
-
-  toggleCollapse (id, ev) {
-    ev.stopPropagation()
   }
 
   render () {
@@ -145,11 +139,19 @@ class App extends React.Component {
           selectNodeId={this.state.selectNodeId}
           select={this.selectNode}
           collapsed={false}
-          toggleCollapse={this.toggleCollapse}
         />
       </aside>
       <main className="tree-content">
         <img className="t-logo loading" src={logo} alt="logo" />
+        <h2 className="vsz-title">
+          <span>代码统计概览</span>
+        </h2>
+        <div className="t-line">
+          <div>
+            <p className="t-code-line">文件路径：{this.state.treeData.path}</p>
+            <p className="t-code-line">该文件/文件夹代码行数为：{this.state.treeData.line}</p>
+          </div>
+        </div>
         <div className="pieArea">
           <Echarts
             chartData={extractContribution(this.state.treeData)}
@@ -160,8 +162,7 @@ class App extends React.Component {
             title="文件数量占比"
           />
         </div>
-        <p className="t-code-line">文件路径：{this.state.treeData.path}</p>
-        <p className="t-code-line">该文件/文件夹代码行数为：{this.state.treeData.line}</p>
+        <AuthorFile data={this.state.treeData} />
       </main>
     </div>
   }
