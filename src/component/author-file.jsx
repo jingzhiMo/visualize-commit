@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Select from 'antd/es/select'
 import 'antd/dist/antd.css'
 import Echarts from './echarts.jsx'
+import { pie } from '../service/echart-option'
 
 const { Option } = Select
 
@@ -140,8 +141,7 @@ function AuthorFile (props) {
       }
     </Select>
     <Echarts
-      chartData={authorData.chartData}
-      title={authorData.title}
+      chartData={pie(authorData.chartData, { title: authorData.title})}
     />
   </div>
 }

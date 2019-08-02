@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { pie } from '../service/echart-option'
 
 import echart from 'echarts/lib/echarts'
 import 'echarts/lib/component/tooltip'
@@ -42,12 +41,8 @@ function Echarts (props) {
   const initRef = (element) => {
     if (!element) return
 
-    let option = pie(props.chartData, {
-      title: props.title
-    })
-
     instance = echart.init(element)
-    instance.setOption(option)
+    instance.setOption(props.chartData)
     addInstance(instance)
   }
 

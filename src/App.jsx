@@ -4,8 +4,10 @@ import './App.css'
 import Tree from './component/tree.jsx'
 import Echarts from './component/echarts.jsx'
 import AuthorFile from './component/author-file.jsx'
+// import CommitPane from './component/commit-pane.jsx'
+import { pie } from './service/echart-option'
 
-const source = window._source
+const { codeData } = window._source
 
 /**
  *  @desc  深度优先查找文件
@@ -119,22 +121,29 @@ class App extends React.Component {
     this.selectNode = this.selectNode.bind(this)
     this.state = {
       selectNodeId: 0,
-      treeData: extractSummary(depthFindFile(0, 'folder', source))
+      treeData: extractSummary(depthFindFile(0, 'folder', codeData))
     }
   }
 
   selectNode (id, type) {
     this.setState({
       selectNodeId: id,
-      treeData: extractSummary(depthFindFile(id, type, source))
+      treeData: extractSummary(depthFindFile(id, type, codeData))
     })
   }
 
   render () {
+    const codeContribution = pie(extractContribution(this.state.treeData), {
+      title: '代码贡献占比'
+    })
+    const fileContribution = pie(extractFileType(this.state.treeData), {
+      title: '文件数量占比'
+    })
+
     return <div className="tree">
       <aside className="tree-aside">
         <Tree
-          treeData={source}
+          treeData={codeData}
           isFolder={true}
           selectNodeId={this.state.selectNodeId}
           select={this.selectNode}
@@ -155,15 +164,16 @@ class App extends React.Component {
         <div className="vsz-code-summary">
           <Echarts
             clazz="vsz-code-summary__echart"
-            chartData={extractContribution(this.state.treeData)}
-            title="代码贡献占比"
+            chartData={codeContribution}
           />
           <Echarts
             clazz="vsz-code-summary__echart"
-            chartData={extractFileType(this.state.treeData)}
-            title="文件数量占比"
+            chartData={fileContribution}
           />
         </div>
+        {
+          //<CommitPane />
+        }
         <AuthorFile data={this.state.treeData} />
       </main>
     </div>
