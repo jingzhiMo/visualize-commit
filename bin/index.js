@@ -122,6 +122,29 @@ function countGitContribution (fileName) {
     })
 }
 
+// 统计当前仓库的不同用户的commit数量
+function countGitCommit () {
+    return new Promise((resolve, reject) => {
+        exec('git shortlog -sn < /dev/tty', { cwd : "./" }, (err, data) => {
+            if (err) {
+                reject(err)
+                return
+            }
+
+            let author = data.split('\n').filter(item => item).map(item => {
+                let msg = item.trim().split('\t')
+
+                return {
+                  commit: msg[0],
+                  author: msg[1]
+                }
+            })
+
+            resolve(author)
+        })
+    })
+}
+
 // 统计文件夹下直接文件的数量
 async function countFolder (path, fileType) {
     let data = {}
@@ -370,9 +393,17 @@ async function countProject (path, folderName, fileType = ['*']) {
 
 console.time('count')
 console.log('analyzing...')
-// countProject('./', ['vue', 'js', 'scss', 'css', '.']).then(data => {
-countProject(CURRENT_PATH + '/', REPO_NAME, ['*']).then(data => {
-    let json = 'window._source = ' + JSON.stringify(data, null, 2)
+
+Promise.all([
+  countProject(CURRENT_PATH + '/', REPO_NAME, ['*']),
+  countGitCommit()
+]).then(data => {
+    let summary = {
+        codeData: data[0],
+        commitData: data[1]
+    }
+
+    let json = 'window._source = ' + JSON.stringify(summary, null, 2)
     let file = '_source.js'
     let targetPath = CURRENT_PATH + '/commit-analyze/'
 
