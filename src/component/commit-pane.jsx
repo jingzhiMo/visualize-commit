@@ -9,11 +9,13 @@ function commitPane ({commit: commitData, line: lineData}) {
   commitData = commitData.slice(0).sort((a, b) => b.commit - a.commit).map(item => {
     let author = lineData.filter(ld => ld.author === item.author)[0]
 
+    if (!author) return
+
     return {
       ...item,
       average: parseInt(author.line / item.commit).toFixed(2)
     }
-  })
+  }).filter(item => !!item)
 
   chartData = bar(commitData)
 
