@@ -39,24 +39,24 @@ export const pie = (data, option = {}) => {
     },
     series : [
       {
-          name: option.title,
-          type: 'pie',
-          radius : '80%',
-          center: ['50%', '50%'],
-          label: {
-            normal: {
-              show: false
-            },
-            emphasis: {
-              show: false
-            }
+        name: option.title,
+        type: 'pie',
+        radius : '80%',
+        center: ['50%', '50%'],
+        label: {
+          normal: {
+            show: false
           },
-          labelLine: {
-            normal: {
-              show: false
-            }
-          },
-          data: data.data
+          emphasis: {
+            show: false
+          }
+        },
+        labelLine: {
+          normal: {
+            show: false
+          }
+        },
+        data: data.data
       }
     ]
   }
