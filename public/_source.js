@@ -483,11 +483,11 @@ window._source = {
   },
   "commitData": [
     {
-      "commit": "36",
+      "commit": 36,
       "author": "author2"
     },
     {
-      "commit": "1",
+      "commit": 1,
       "author": "author1"
     }
   ]

@@ -1,15 +1,17 @@
-export const bar = (data, option = {}) => {
+export const bar = (data) => {
   let legendData = []
-  let seriesData = []
+  let commitData = []
+  let averageData = []
 
   data.forEach(item => {
     legendData.push(item.author)
-    seriesData.push(item[option.seriesProp])
+    commitData.push(item.commit)
+    averageData.push(item.average)
   })
 
   return {
     title: {
-      text: option.title,
+      text: 'commit 贡献',
       x: 'center',
       top: 0
     },
@@ -35,11 +37,25 @@ export const bar = (data, option = {}) => {
       '#e1bee7',
       '#cfd8dc'
     ],
+    legend: {
+      type: 'scroll',
+      data: ['commit 贡献数量', 'commit 平均贡献行数'],
+      width: '80%',
+      bottom: 0
+    },
     tooltip : {
       trigger: 'item',
       showDelay: 20,
       formatter (param) {
-        return  `${param.name} ${option.tooltipDesc}：${param.data}`
+        let tip
+
+        // 平均贡献行数
+        if (param.seriesIndex === 1) {
+          tip = ' commit 平均贡献行数'
+        } else {
+          tip = '贡献 commit 数量'
+        }
+        return  `${param.name} <br /> ${tip}：${param.data}`
       }
     },
     xAxis: {
@@ -64,33 +80,66 @@ export const bar = (data, option = {}) => {
           }
       }
     },
-    yAxis: {
-      type: 'value',
-      axisLabel: {
-        color: '#909399'
-      },
-      axisLine: {
-        show: false,
-        lineStyle: {
-          color: '#d0d3da'
+    yAxis: [
+      {
+        name: 'commit 贡献数量',
+        type: 'value',
+        axisLabel: {
+          color: '#909399'
+        },
+        axisLine: {
+          show: false,
+          lineStyle: {
+            color: '#d0d3da'
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        splitLine: {
+          lineStyle: {
+              color: '#ebeef5'
+          }
         }
       },
-      axisTick: {
-        show: false
-      },
-      splitLine: {
-        lineStyle: {
-            color: '#ebeef5'
+      {
+        name: 'commit平均贡献行数',
+        type: 'value',
+        axisLabel: {
+          color: '#909399'
+        },
+        axisLine: {
+          show: false,
+          lineStyle: {
+            color: '#d0d3da'
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        splitLine: {
+          show: false,
+          lineStyle: {
+              color: '#ebeef5'
+          }
         }
       }
-    },
+    ],
     series : [
       {
-          name: option.title,
-          data: seriesData,
+          name: 'commit 贡献数量',
+          data: commitData,
           type: 'bar',
           barMaxWidth: '48px',
           barMinHeight: 4
+      },
+      {
+        name: 'commit 平均贡献行数',
+        data: averageData,
+        type: 'bar',
+        barMaxWidth: '48px',
+        barMinHeight: 4,
+        yAxisIndex: 1
       }
     ]
   }
