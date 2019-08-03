@@ -135,7 +135,7 @@ function countGitCommit () {
                 let msg = item.trim().split('\t')
 
                 return {
-                  commit: msg[0],
+                  commit: parseInt(msg[0]) || 0,
                   author: msg[1]
                 }
             })
