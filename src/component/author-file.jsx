@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Select from 'antd/es/select'
 import 'antd/dist/antd.css'
 import Echarts from './echarts.jsx'
-import { pie } from '../service/echart-option'
+import { pie } from '../service/echarts-pie'
 
 const { Option } = Select
 
