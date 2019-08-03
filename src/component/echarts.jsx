@@ -6,6 +6,7 @@ import 'echarts/lib/component/title'
 import 'echarts/lib/component/legendScroll'
 import 'echarts/lib/component/markLine'
 import 'echarts/lib/chart/pie'
+import 'echarts/lib/chart/bar'
 
 // 需要监听 onresize 的方法
 let instanceList = []
