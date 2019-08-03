@@ -125,7 +125,7 @@ function countGitContribution (fileName) {
 // 统计当前仓库的不同用户的commit数量
 function countGitCommit () {
     return new Promise((resolve, reject) => {
-        exec('git shortlog -sn < /dev/tty', { cwd : "./" }, (err, data) => {
+        exec('git shortlog -sn --no-merges < /dev/tty', { cwd : "./" }, (err, data) => {
             if (err) {
                 reject(err)
                 return
