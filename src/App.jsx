@@ -171,7 +171,7 @@ class App extends React.Component {
             chartData={fileContribution}
           />
         </div>
-        <CommitPane data={commitData} />
+        <CommitPane commit={commitData} line={codeData.contribution} />
         <AuthorFile data={this.state.treeData} />
       </main>
     </div>

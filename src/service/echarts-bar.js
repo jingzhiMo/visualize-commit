@@ -4,7 +4,7 @@ export const bar = (data, option = {}) => {
 
   data.forEach(item => {
     legendData.push(item.author)
-    seriesData.push(item.commit)
+    seriesData.push(item[option.seriesProp])
   })
 
   return {
@@ -39,7 +39,7 @@ export const bar = (data, option = {}) => {
       trigger: 'item',
       showDelay: 20,
       formatter (param) {
-        return  `${param.name} commit 数量：${param.data}`
+        return  `${param.name} ${option.tooltipDesc}：${param.data}`
       }
     },
     xAxis: {
