@@ -9,7 +9,7 @@ function commitPane ({commit: commitData, line: lineData}) {
   commitData = commitData.slice(0).sort((a, b) => b.commit - a.commit).map(item => {
     let author = lineData.filter(ld => ld.author === item.author)[0]
 
-    if (!author) return
+    if (!author) return null
 
     return {
       ...item,

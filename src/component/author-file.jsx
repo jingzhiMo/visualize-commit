@@ -85,10 +85,10 @@ function genAuthor (allAuthorData, authorName) {
 
   authorData = allAuthorData[authorName]
 
-  let fileList = Object.keys(authorData)
+  let fileList = authorData ? Object.keys(authorData) : []
 
   return {
-    title: `${authorName} 贡献文件类型`,
+    title: `${authorName || ''} 贡献文件类型`,
     chartData: {
       data: fileList.map(type => {
         return {
