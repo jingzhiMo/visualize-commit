@@ -17,6 +17,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "classnames": "^2.2.6",
     "fs-extra": "^8.1.0"
   },
   "scripts": {
@@ -45,8 +46,8 @@
     "antd": "^3.20.7",
     "cz-conventional-changelog": "3.0.2",
     "echarts": "^4.2.1",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-scripts": "^3.0.1"
   },
   "config": {
