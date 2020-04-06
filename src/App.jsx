@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import logo from './logo.svg'
 import './App.css'
 import Tree from './component/tree.jsx'
@@ -6,6 +6,7 @@ import Echarts from './component/echarts.jsx'
 import AuthorFile from './component/author-file.jsx'
 import CommitPane from './component/commit-pane.jsx'
 import { pie } from './service/echarts-pie'
+import treeContext from './context/tree-context'
 
 const { codeData, commitData } = window._source
 
@@ -115,67 +116,66 @@ function extractFileType (sourceData) {
   }
 }
 
-class App extends React.Component {
-  constructor () {
-    super()
-    this.selectNode = this.selectNode.bind(this)
-    this.state = {
-      selectNodeId: 0,
-      treeData: extractSummary(depthFindFile(0, 'folder', codeData))
-    }
+function App() {
+  const [selectNodeId, setSelectNodeId] = useState(0)
+  const [treeData, setTreeData] = useState(extractSummary(depthFindFile(0, 'folder', codeData)))
+
+  // 修改节点数据
+  const selectNode = useCallback((id, type) => {
+    setSelectNodeId(id)
+    setTreeData(extractSummary(depthFindFile(id, type, codeData)))
+  }, [])
+  const contextValue = {
+    selectNodeId,
+    selectNode
   }
 
-  selectNode (id, type) {
-    this.setState({
-      selectNodeId: id,
-      treeData: extractSummary(depthFindFile(id, type, codeData))
-    })
-  }
-
-  render () {
-    const codeContribution = pie(extractContribution(this.state.treeData), {
+  const codeContribution = useMemo(() => {
+    return pie(extractContribution(treeData), {
       title: '代码贡献占比'
     })
-    const fileContribution = pie(extractFileType(this.state.treeData), {
+  }, [treeData])
+  const fileContribution = useMemo(() => {
+    return pie(extractFileType(treeData), {
       title: '文件数量占比'
     })
+  }, [treeData])
 
-    return <div className="tree">
-      <aside className="tree-aside">
+  return <div className="tree">
+    <aside className="tree-aside">
+      <treeContext.Provider value={contextValue}>
         <Tree
           treeData={codeData}
           isFolder={true}
-          selectNodeId={this.state.selectNodeId}
-          select={this.selectNode}
           collapsed={false}
         />
-      </aside>
-      <main className="tree-content">
-        <img className="t-logo loading" src={logo} alt="logo" />
-        <h2 className="vsz-title">
-          <span>代码统计概览</span>
-        </h2>
-        <div className="t-line">
-          <div>
-            <p className="t-code-line">文件路径：{this.state.treeData.path}</p>
-            <p className="t-code-line">该文件/文件夹代码行数为：{this.state.treeData.line}</p>
-          </div>
+      </treeContext.Provider>
+    </aside>
+    <main className="tree-content">
+      <img className="t-logo loading" src={logo} alt="logo" />
+      <h2 className="vsz-title">
+        <span>代码统计概览</span>
+      </h2>
+      <div className="t-line">
+        <div>
+          <p className="t-code-line">文件路径：{treeData.path}</p>
+          <p className="t-code-line">该文件/文件夹代码行数为：{treeData.line}</p>
         </div>
-        <div className="vsz-code-summary">
-          <Echarts
-            clazz="vsz-code-summary__echart"
-            chartData={codeContribution}
-          />
-          <Echarts
-            clazz="vsz-code-summary__echart"
-            chartData={fileContribution}
-          />
-        </div>
-        <CommitPane commit={commitData} line={codeData.contribution} />
-        <AuthorFile data={this.state.treeData} />
-      </main>
-    </div>
-  }
+      </div>
+      <div className="vsz-code-summary">
+        <Echarts
+          clazz="vsz-code-summary__echart"
+          chartData={codeContribution}
+        />
+        <Echarts
+          clazz="vsz-code-summary__echart"
+          chartData={fileContribution}
+        />
+      </div>
+      <CommitPane commit={commitData} line={codeData.contribution} />
+      <AuthorFile data={treeData} />
+    </main>
+  </div>
 }
 
 export default App;
