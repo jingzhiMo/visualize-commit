@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Select from 'antd/es/select'
 import 'antd/dist/antd.css'
 import Echarts from './echarts.jsx'
@@ -102,23 +102,10 @@ function genAuthor (allAuthorData, authorName) {
 }
 
 function AuthorFile (props) {
-  const [allAuthorData, setAllAuthorData] = useState(extractAuthorFile(props.data))
-  const [allAuthorName, setAllAuthorName] = useState(Object.keys(allAuthorData))
+  const allAuthorData = extractAuthorFile(props.data)
+  const allAuthorName = Object.keys(allAuthorData)
   const [authorData, setAuthorData] = useState(genAuthor(allAuthorData))
   const [selectAuthor, setSelectAuthor] = useState(allAuthorName[0])
-
-  useEffect(() => {
-    setAllAuthorData(extractAuthorFile(props.data))
-  }, [props.data])
-
-  useEffect(() => {
-    setAllAuthorName(Object.keys(allAuthorData))
-    setAuthorData(genAuthor(allAuthorData))
-  }, [allAuthorData])
-
-  useEffect(() => {
-    setSelectAuthor(allAuthorName[0])
-  }, [allAuthorName])
 
   function updateSelect (value) {
     setSelectAuthor(value)
@@ -132,7 +119,7 @@ function AuthorFile (props) {
     <Select
       style={{ width: 200 }}
       value={selectAuthor}
-      onChange={value => updateSelect(value)}
+      onChange={updateSelect}
     >
       {
         allAuthorName.map(item => {
