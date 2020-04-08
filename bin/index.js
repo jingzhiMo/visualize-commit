@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const path = require('path')
 const fs = require('fs')
+const opn = require('better-opn')
 const exec = require('child_process').exec
 const copyFolder = require('fs-extra').copySync
 // 当前执行的路径
@@ -423,6 +424,8 @@ Promise.all([
 
         console.timeEnd('count')
         console.log('succesful!')
+        // 自动打开
+        opn(targetPath + 'index.html')
     })
 })
 
