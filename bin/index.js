@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const path = require('path')
 const fs = require('fs')
-const opn = require('better-opn')
+const opn = require('open')
 const exec = require('child_process').exec
 const copyFolder = require('fs-extra').copySync
 // 当前执行的路径
@@ -393,7 +393,7 @@ async function countProject (path, folderName, fileType = ['*']) {
 }
 
 console.time('count')
-console.log('analyzing...')
+console.log('analyzing...May be it take some times')
 
 Promise.all([
   countProject(CURRENT_PATH + '/', REPO_NAME, ['*']),
