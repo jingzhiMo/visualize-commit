@@ -4,6 +4,7 @@ const fs = require('fs')
 const opn = require('open')
 const exec = require('child_process').exec
 const copyFolder = require('fs-extra').copySync
+const { collectAuthorCommitMsg } = require('./commit-detail')
 // 当前执行的路径
 const CURRENT_PATH = process.cwd()
 // 仓库名称
@@ -396,8 +397,9 @@ console.time('count')
 console.log('analyzing...May be it take some times')
 
 Promise.all([
-  countProject(CURRENT_PATH + '/', REPO_NAME, ['*']),
-  countGitCommit()
+    countProject(CURRENT_PATH + '/', REPO_NAME, ['*']),
+    countGitCommit(),
+    collectAuthorCommitMsg()
 ]).then(data => {
     let summary = {
         codeData: data[0],
