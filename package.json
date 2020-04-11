@@ -19,6 +19,7 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "fs-extra": "^8.1.0",
+    "nodejieba": "^2.4.1",
     "open": "^7.0.3"
   },
   "scripts": {
