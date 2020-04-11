@@ -397,10 +397,11 @@ console.time('count')
 console.log('analyzing...May be it take some times')
 
 Promise.all([
-    countProject(CURRENT_PATH + '/', REPO_NAME, ['*']),
-    countGitCommit(),
+    // countProject(CURRENT_PATH + '/', REPO_NAME, ['*']),
+    // countGitCommit(),
     collectAuthorCommitMsg()
 ]).then(data => {
+    /*
     let summary = {
         codeData: data[0],
         commitData: data[1]
@@ -429,5 +430,6 @@ Promise.all([
         // 自动打开
         opn(targetPath + 'index.html')
     })
+    */
 })
 
