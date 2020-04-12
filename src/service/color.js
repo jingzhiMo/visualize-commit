@@ -1,0 +1,22 @@
+export default [
+  '#5097e9',
+  '#00bcd4',
+  '#ffa726',
+  '#e57373',
+  '#8d6e63',
+  '#9575cd',
+  '#ff8a65',
+  '#81c784',
+  '#ce93d8',
+  '#90a4ae',
+  '#9dc6f5',
+  '#80deea',
+  '#ffcc80',
+  '#ef9a9a',
+  '#bcaaa4',
+  '#d1c4e9',
+  '#ffccbc',
+  '#c8e6c9',
+  '#e1bee7',
+  '#cfd8dc'
+]
