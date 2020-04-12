@@ -86,10 +86,12 @@ const collectAuthorCommitMsg = async () => {
 
         const match = line.match(pattern)
         const author = match[1]
+        const msg = match[2].slice(1)
 
         if (!author || BLACK_LIST.includes(author)) return
 
-        authorCommitMsg[author] = mergeSplitData(authorCommitMsg[author], splitCommitMsg(match[2].slice(1)))
+        authorCommitMsg[author] = mergeSplitData(authorCommitMsg[author], splitCommitMsg(msg))
+        authorCommitMsg['all'] = mergeSplitData(authorCommitMsg['all'], splitCommitMsg(msg))
       })
     })
     command.stderr.on('data', error => {
@@ -104,9 +106,9 @@ const collectAuthorCommitMsg = async () => {
         const mapData = authorCommitMsg[name]
         const sortArray = []
 
-        for (let [key, value] of mapData) {
+        for (let [name, value] of mapData) {
           sortArray.push({
-            key,
+            name,
             value
           })
         }

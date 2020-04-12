@@ -404,7 +404,7 @@ Promise.all([
     let summary = {
         codeData: data[0],
         commitData: data[1],
-        wordcloudData: data[2]
+        wordCloudData: data[2]
     }
 
     let json = 'window._source = ' + JSON.stringify(summary, null, 2)
