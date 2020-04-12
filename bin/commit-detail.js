@@ -36,10 +36,11 @@ const splitCommitMsg = msg => {
     data.set(item, data.get(item) + 1 || 1)
   })
 
+  /*
   console.log('===========', msg)
   console.log('en', en)
   console.log('word', word)
-
+  */
   return data
 }
 
@@ -95,8 +96,24 @@ const collectAuthorCommitMsg = async () => {
       reject(error)
     })
     command.on('close', code => {
-      console.log(authorCommitMsg)
-      resolve(authorCommitMsg)
+      const authorName = Object.keys(authorCommitMsg)
+      const result = {}
+
+      // 对用户的关键词获取前100个
+      authorName.forEach(name => {
+        const mapData = authorCommitMsg[name]
+        const sortArray = []
+
+        for (let [key, value] of mapData) {
+          sortArray.push({
+            key,
+            value
+          })
+        }
+
+        result[name] = sortArray.sort((a, b) => b.value - a.value).slice(0, 100)
+      })
+      resolve(result)
     })
   })
 }
