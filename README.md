@@ -53,16 +53,21 @@ $ yarn add vsz
 下面的统计截图是对[`create-react-app`仓库](https://github.com/facebook/create-react-app)的`v3.3.0`版本统计的demo
 
 * 统计每个文件夹下成员的贡献占比
+
 ![vsz-1.png](https://i.loli.net/2020/04/16/GvIqZgNJBsuAUy9.png)
 
 * 统计每个文件夹下不同文件的占比
+
 ![vsz-2.png](https://i.loli.net/2020/04/16/N71aEZRvFm85uA3.png)
 
 * 统计成员commit的数量与每个commit平均更改行数
+
 ![vsz-3.png](https://i.loli.net/2020/04/16/l2y6HX8SzwtEJO3.png)
 
 * 统计成员贡献的文件类型占比
+
 ![vsz-4.png](https://i.loli.net/2020/04/16/oGiWFhc457CbAdV.png)
 
 * 统计成员commit的提交信息词云分析
+
 ![vsz-5.png](https://i.loli.net/2020/04/16/UerDEdBCoI6Qsbk.png)
