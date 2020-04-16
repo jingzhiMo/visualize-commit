@@ -78,7 +78,7 @@ function extractContribution (sourceData) {
         value: item.line,
         name: item.author
       }
-    }),
+    }).sort((a, b) => b.value - a.value).slice(0, 20),
     legendData: contribution.map(item => item.author)
   }
 }

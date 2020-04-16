@@ -38,12 +38,13 @@ function extractAuthorFile (sourceData) {
   if (!sourceData.file && sourceData.contribution) {
     let fileType = sourceData.type
 
-    return sourceData.contribution.reduce((base, item) => {
-      base[item.author] = {}
-      base[item.author][fileType] = item.line
+    return sourceData.contribution
+      .reduce((base, item) => {
+        base[item.author] = {}
+        base[item.author][fileType] = item.line
 
-      return base
-    }, author)
+        return base
+      }, author)
   }
   // 遍历当前节点的文件类型
   for (let file of (sourceData.file || [])) {
@@ -102,8 +103,13 @@ function genAuthor (allAuthorData, authorName) {
 }
 
 function AuthorFile (props) {
+  const showAuthor = props.data.contribution
+    .sort((a, b) => b.line - a.line)
+    .slice(0, 20)
+    .map(item => item.author)
+
   const allAuthorData = extractAuthorFile(props.data)
-  const allAuthorName = Object.keys(allAuthorData)
+  const allAuthorName = Object.keys(allAuthorData).filter(author => showAuthor.includes(author))
   const [authorData, setAuthorData] = useState(genAuthor(allAuthorData))
   const [selectAuthor, setSelectAuthor] = useState(allAuthorName[0])
 
