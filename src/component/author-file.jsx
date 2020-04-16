@@ -109,7 +109,6 @@ function AuthorFile (props) {
     .map(item => item.author)
 
   const allAuthorData = extractAuthorFile(props.data)
-  const allAuthorName = Object.keys(allAuthorData).filter(author => showAuthor.includes(author))
   const [authorData, setAuthorData] = useState(genAuthor(allAuthorData, showAuthor[0]))
   const [selectAuthor, setSelectAuthor] = useState(showAuthor[0])
 
