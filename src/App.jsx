@@ -4,11 +4,12 @@ import './App.css'
 import Tree from './component/tree.jsx'
 import Echarts from './component/echarts.jsx'
 import AuthorFile from './component/author-file.jsx'
+import AuthorWordCloud from './component/author-wordcloud.jsx'
 import CommitPane from './component/commit-pane.jsx'
 import { pie } from './service/echarts-pie'
 import treeContext from './context/tree-context'
 
-const { codeData, commitData } = window._source
+const { codeData, commitData, wordCloudData } = window._source
 
 /**
  *  @desc  深度优先查找文件
@@ -77,7 +78,7 @@ function extractContribution (sourceData) {
         value: item.line,
         name: item.author
       }
-    }),
+    }).sort((a, b) => b.value - a.value).slice(0, 20),
     legendData: contribution.map(item => item.author)
   }
 }
@@ -174,6 +175,7 @@ function App() {
       </div>
       <CommitPane commit={commitData} line={codeData.contribution} />
       <AuthorFile data={treeData} />
+      <AuthorWordCloud data={wordCloudData} />
     </main>
   </div>
 }

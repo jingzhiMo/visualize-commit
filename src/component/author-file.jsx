@@ -38,12 +38,13 @@ function extractAuthorFile (sourceData) {
   if (!sourceData.file && sourceData.contribution) {
     let fileType = sourceData.type
 
-    return sourceData.contribution.reduce((base, item) => {
-      base[item.author] = {}
-      base[item.author][fileType] = item.line
+    return sourceData.contribution
+      .reduce((base, item) => {
+        base[item.author] = {}
+        base[item.author][fileType] = item.line
 
-      return base
-    }, author)
+        return base
+      }, author)
   }
   // 遍历当前节点的文件类型
   for (let file of (sourceData.file || [])) {
@@ -86,26 +87,30 @@ function genAuthor (allAuthorData, authorName) {
   authorData = allAuthorData[authorName]
 
   let fileList = authorData ? Object.keys(authorData) : []
-
+  let data = fileList.map(type => {
+    return {
+      name: type,
+      value: authorData[type]
+    }
+  }).sort((a, b) => b.value - a.value)
   return {
     title: `${authorName || ''} 贡献文件类型`,
     chartData: {
-      data: fileList.map(type => {
-        return {
-          name: type,
-          value: authorData[type]
-        }
-      }).sort((a, b) => b.value - a.value),
-      legendData: fileList
+      data,
+      legendData: data.map(item => item.name)
     }
   }
 }
 
 function AuthorFile (props) {
+  const showAuthor = props.data.contribution
+    .sort((a, b) => b.line - a.line)
+    .slice(0, 20)
+    .map(item => item.author)
+
   const allAuthorData = extractAuthorFile(props.data)
-  const allAuthorName = Object.keys(allAuthorData)
-  const [authorData, setAuthorData] = useState(genAuthor(allAuthorData))
-  const [selectAuthor, setSelectAuthor] = useState(allAuthorName[0])
+  const [authorData, setAuthorData] = useState(genAuthor(allAuthorData, showAuthor[0]))
+  const [selectAuthor, setSelectAuthor] = useState(showAuthor[0])
 
   function updateSelect (value) {
     setSelectAuthor(value)
@@ -122,7 +127,7 @@ function AuthorFile (props) {
       onChange={updateSelect}
     >
       {
-        allAuthorName.map(item => {
+        showAuthor.map(item => {
           return <Option value={item} key={item} >{item}</Option>
         })
       }

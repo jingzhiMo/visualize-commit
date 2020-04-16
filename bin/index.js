@@ -4,6 +4,7 @@ const fs = require('fs')
 const opn = require('open')
 const exec = require('child_process').exec
 const copyFolder = require('fs-extra').copySync
+const { collectAuthorCommitMsg } = require('./commit-detail')
 // 当前执行的路径
 const CURRENT_PATH = process.cwd()
 // 仓库名称
@@ -396,12 +397,21 @@ console.time('count')
 console.log('analyzing...May be it take some times')
 
 Promise.all([
-  countProject(CURRENT_PATH + '/', REPO_NAME, ['*']),
-  countGitCommit()
+    countProject(CURRENT_PATH + '/', REPO_NAME, ['*']),
+    countGitCommit(),
+    collectAuthorCommitMsg()
 ]).then(data => {
+    // 词云与commit数量 只保留前20个用户
+    const showAuthor = data[1].slice(0, 20).map(d => d.author)
+    const wordCloudData = {}
+
+    showAuthor.concat(['all']).forEach(author => {
+        wordCloudData[author] = data[2][author]
+    })
     let summary = {
         codeData: data[0],
-        commitData: data[1]
+        commitData: data[1].slice(0, 20),
+        wordCloudData
     }
 
     let json = 'window._source = ' + JSON.stringify(summary, null, 2)
