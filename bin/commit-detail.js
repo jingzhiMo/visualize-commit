@@ -36,11 +36,6 @@ const splitCommitMsg = msg => {
     data.set(item, data.get(item) + 1 || 1)
   })
 
-  /*
-  console.log('===========', msg)
-  console.log('en', en)
-  console.log('word', word)
-  */
   return data
 }
 
