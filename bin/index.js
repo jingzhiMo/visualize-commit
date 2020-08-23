@@ -404,16 +404,18 @@ async function countProject(path, folderName, fileType = ['*']) {
 function gitClone(repo) {
   let tmpFolderPath = 'tmp'
   let suffix = 0
+  const generateTargetPath = () => {
+    return CURRENT_PATH + '/' + tmpFolderPath + suffix
+  }
+  let targetPath = generateTargetPath()
 
-  while (fs.existsSync(CURRENT_PATH + '/' + tmpFolderPath + suffix)) {
+  while (fs.existsSync(targetPath)) {
     suffix++
+    targetPath = generateTargetPath()
   }
 
-  // 新增临时文件夹
-  tmpFolderPath += suffix
-
   return new Promise((resolve, reject) => {
-    fs.mkdirSync(tmpFolderPath)
+    fs.mkdirSync(tmpFolderPath + suffix)
 
     const child = spawn(
       'git',
@@ -424,16 +426,17 @@ function gitClone(repo) {
         '--progress'
       ],
       {
-        cwd: `./${tmpFolderPath}`
+        cwd: targetPath
       }
     );
+    // 解决使用子进行无法显示 git clone 过程信息
     child.stdout.pipe(process.stdout);
     child.stderr.pipe(process.stderr);
 
     child.on('exit', code => {
       if (code === 0) {
         console.log('\n clone repository successful.\n')
-        resolve()
+        resolve(targetPath)
       } else {
         console.log(`\n clone repository failder. error code is ${code}`)
 
