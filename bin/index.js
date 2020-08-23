@@ -2,11 +2,14 @@
 const path = require('path')
 const fs = require('fs')
 const opn = require('open')
-const exec = require('child_process').exec
+const { program } = require('commander')
+const { exec, spawn } = require('child_process')
 const copyFolder = require('fs-extra').copySync
 const { collectAuthorCommitMsg } = require('./commit-detail')
+
 // 当前执行的路径
 const CURRENT_PATH = process.cwd()
+
 // 仓库名称
 const REPO_NAME = CURRENT_PATH.split('/').reverse()[0]
 
@@ -394,6 +397,67 @@ async function countProject(path, folderName, fileType = ['*']) {
   return thisData
 }
 
+/**
+ * @description 克隆远端的仓库
+ * @param {string} repo 远端仓库的地址
+ */
+function gitClone(repo) {
+  let tmpFolderPath = 'tmp'
+  let suffix = 0
+
+  while (fs.existsSync(CURRENT_PATH + '/' + tmpFolderPath + suffix)) {
+    suffix++
+  }
+
+  // 新增临时文件夹
+  tmpFolderPath += suffix
+
+  return new Promise((resolve, reject) => {
+    fs.mkdirSync(tmpFolderPath)
+
+    const child = spawn(
+      'git',
+      [
+        'clone',
+        repo,
+        // 在命令行能够显示克隆仓库的过程
+        '--progress'
+      ],
+      {
+        cwd: `./${tmpFolderPath}`
+      }
+    );
+    child.stdout.pipe(process.stdout);
+    child.stderr.pipe(process.stderr);
+
+    child.on('exit', code => {
+      if (code === 0) {
+        console.log('\n clone repository successful.\n')
+        resolve()
+      } else {
+        console.log(`\n clone repository failder. error code is ${code}`)
+
+        // 删除临时新建的文件夹
+        fs.rmdirSync(tmpFolderPath, { recursive: true })
+        reject()
+      }
+    })
+  })
+}
+
+// 读取输入的参数，git 为远端的仓库
+program.version('0.0.1')
+  .option('-g, --git <string>', 'use origin git repository')
+  .parse(process.argv)
+
+if (program.git) {
+  gitClone(program.git).then(() => {
+    console.log('success')
+  }).catch(err => {
+    console.log('error', err)
+  })
+}
+return
 console.time('count')
 console.log('analyzing...May be it take some times')
 
