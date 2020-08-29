@@ -11,7 +11,7 @@ const { collectAuthorCommitMsg } = require('./commit-detail')
 const CURRENT_PATH = process.cwd()
 
 // 仓库名称
-const REPO_NAME = CURRENT_PATH.split('/').reverse()[0]
+let REPO_NAME = CURRENT_PATH.split('/').reverse()[0]
 
 // 进入用户文件夹的命令
 let CD_COMMAND = CURRENT_PATH === __dirname ? '' : `cd ${CURRENT_PATH} && `
@@ -314,7 +314,7 @@ async function countProject(path, folderName, fileType = ['*']) {
   let thisData = {
     id: _uid++,
     name: folderName,
-    path,
+    path: path.split(REPO_NAME).reverse()[0],
     // 这行代码是统计文件夹下所有文件的行数，文件夹下可能包括部分文件不在 git 跟踪；所以不准确
     // code: await countFolder(path, fileType),
     code: {},
@@ -346,7 +346,7 @@ async function countProject(path, folderName, fileType = ['*']) {
     if (isValidFile(fileName, fileType) && await isGitTrack(file)) {
       let fileDetail = {
         name: fileName,
-        path: file,
+        path: file.split(REPO_NAME).reverse()[0],
         line: 0,
         // line: await count(file),
         type: getFileExt(fileName),
@@ -457,14 +457,13 @@ program.version('0.0.1')
 async function run() {
   let gitCloneTmpFolder
   let repoPath
-  let repoName
 
   if (program.git) {
     try {
       gitCloneTmpFolder = (await gitClone(program.git)) + '/'
       // 临时文件夹中，只有一个文件夹，是克隆下来的 git 仓库
-      repoName = fs.readdirSync(gitCloneTmpFolder)[0]
-      repoPath = gitCloneTmpFolder + repoName + '/'
+      REPO_NAME = fs.readdirSync(gitCloneTmpFolder)[0]
+      repoPath = gitCloneTmpFolder + REPO_NAME + '/'
       CD_COMMAND = `cd ${repoPath} && `
     } catch (err) {
       console.log('git clone error', err)
@@ -472,7 +471,6 @@ async function run() {
     }
   } else {
     repoPath = CURRENT_PATH + '/'
-    repoName = REPO_NAME
   }
 
   console.time('count')
@@ -481,7 +479,7 @@ async function run() {
   Promise.all([
     countProject(
       repoPath,
-      repoName,
+      REPO_NAME,
       ['*']
     ),
     countGitCommit(),
