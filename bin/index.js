@@ -14,7 +14,7 @@ const CURRENT_PATH = process.cwd()
 const REPO_NAME = CURRENT_PATH.split('/').reverse()[0]
 
 // 进入用户文件夹的命令
-const CD_COMMAND = CURRENT_PATH === __dirname ? '' : `cd ${CURRENT_PATH} && `
+let CD_COMMAND = CURRENT_PATH === __dirname ? '' : `cd ${CURRENT_PATH} && `
 
 // 需要剔除的关键词
 const EXCLUDE_PATTERN = [
@@ -402,7 +402,7 @@ async function countProject(path, folderName, fileType = ['*']) {
  * @param {string} repo 远端仓库的地址
  */
 function gitClone(repo) {
-  let tmpFolderPath = 'tmp'
+  let tmpFolderPath = 'tmp_'
   let suffix = 0
   const generateTargetPath = () => {
     return CURRENT_PATH + '/' + tmpFolderPath + suffix
@@ -453,56 +453,82 @@ program.version('0.0.1')
   .option('-g, --git <string>', 'use origin git repository')
   .parse(process.argv)
 
-if (program.git) {
-  gitClone(program.git).then(() => {
-    console.log('success')
-  }).catch(err => {
-    console.log('error', err)
-  })
-}
-return
-console.time('count')
-console.log('analyzing...May be it take some times')
+// 程序启动
+async function run() {
+  let gitCloneTmpFolder
+  let repoPath
+  let repoName
 
-Promise.all([
-  countProject(CURRENT_PATH + '/', REPO_NAME, ['*']),
-  countGitCommit(),
-  collectAuthorCommitMsg()
-]).then(data => {
-  // 词云与commit数量 只保留前20个用户
-  const showAuthor = data[1].slice(0, 20).map(d => d.author)
-  const wordCloudData = {}
-
-  showAuthor.concat(['all']).forEach(author => {
-    wordCloudData[author] = data[2][author]
-  })
-  let summary = {
-    codeData: data[0],
-    commitData: data[1].slice(0, 20),
-    wordCloudData
+  if (program.git) {
+    try {
+      gitCloneTmpFolder = (await gitClone(program.git)) + '/'
+      // 临时文件夹中，只有一个文件夹，是克隆下来的 git 仓库
+      repoName = fs.readdirSync(gitCloneTmpFolder)[0]
+      repoPath = gitCloneTmpFolder + repoName + '/'
+      CD_COMMAND = `cd ${repoPath} && `
+    } catch (err) {
+      console.log('git clone error', err)
+      return
+    }
+  } else {
+    repoPath = CURRENT_PATH + '/'
+    repoName = REPO_NAME
   }
 
-  let json = 'window._source = ' + JSON.stringify(summary, null, 2)
-  let file = '_source.js'
-  let targetPath = CURRENT_PATH + '/commit-analyze/'
+  console.time('count')
+  console.log('analyzing...May be it take some times')
 
-  // 判断是否存在，存在则删除
-  if (fs.existsSync(targetPath)) {
-    rmdir(targetPath)
-  }
+  Promise.all([
+    countProject(
+      repoPath,
+      repoName,
+      ['*']
+    ),
+    countGitCommit(),
+    collectAuthorCommitMsg()
+  ]).then(data => {
+    // 词云与commit数量 只保留前20个用户
+    const showAuthor = data[1].slice(0, 20).map(d => d.author)
+    const wordCloudData = {}
 
-  // 复制 html 等文件
-  copyFolder(path.resolve(__dirname + '/../build'), targetPath)
-
-  // 写入统计文件
-  fs.writeFile(targetPath + file, json, 'utf-8', (err, data) => {
-    if (err) {
-      throw new Error('write file error', err)
+    showAuthor.concat(['all']).forEach(author => {
+      wordCloudData[author] = data[2][author]
+    })
+    let summary = {
+      codeData: data[0],
+      commitData: data[1].slice(0, 20),
+      wordCloudData
     }
 
-    console.timeEnd('count')
-    console.log('succesful!')
-    // 自动打开
-    opn(targetPath + 'index.html')
+    let json = 'window._source = ' + JSON.stringify(summary, null, 2)
+    let file = '_source.js'
+    let targetPath = CURRENT_PATH + '/commit-analyze/'
+
+    // 判断是否存在，存在则删除
+    if (fs.existsSync(targetPath)) {
+      rmdir(targetPath)
+    }
+
+    // 复制 html 等文件
+    copyFolder(path.resolve(__dirname + '/../build'), targetPath)
+
+    // 删除克隆仓库的文件夹
+    if (gitCloneTmpFolder) {
+      rmdir(gitCloneTmpFolder)
+    }
+
+    // 写入统计文件
+    fs.writeFile(targetPath + file, json, 'utf-8', (err, data) => {
+      if (err) {
+        throw new Error('write file error', err)
+      }
+
+      console.timeEnd('count')
+      console.log('succesful!')
+      // 自动打开
+      opn(targetPath + 'index.html')
+    })
   })
-})
+}
+
+run()
