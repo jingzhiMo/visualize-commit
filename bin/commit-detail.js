@@ -56,6 +56,7 @@ const mergeSplitData = (baseData, addData) => {
 const collectAuthorCommitMsg = async () => {
   const command = spawn(
     `git`,
+    // <vsz /> 是用于唯一标识分行的分隔符
     [
       'log',
       `--pretty=%an,%B<vsz />`,
