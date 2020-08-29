@@ -9,6 +9,7 @@
 
 ## 使用方法
 
+### 对本地仓库进行分析
 * 使用 npx 命令生成（推荐）
 
 ```bash
@@ -42,6 +43,16 @@ $ npm run vsz
 # or
 $ yarn add vsz
 ```
+
+### 对远端的仓库进行分析
+
+通过配置 `-g` 命令，设定需要分析的远端仓库，例如：
+
+```bash
+$ npx visualize-commit -g git@github.com:jingzhiMo/visualize-commit.git
+```
+
+**目前只支持 git 协议的克隆方式，不支持 https 的方式**
 
 ## 依赖环境
 
