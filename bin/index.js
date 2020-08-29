@@ -131,7 +131,7 @@ function countGitContribution(fileName) {
 function countGitCommit() {
   const tty = process.platform === 'win32' ? 'CON' : '/dev/tty'
   return new Promise((resolve, reject) => {
-    exec(`git shortlog -sn --no-merges < ${tty}`, { cwd: "./" }, (err, data) => {
+    exec(`${CD_COMMAND}git shortlog -sn --no-merges < ${tty}`, { cwd: "./" }, (err, data) => {
       if (err) {
         reject(err)
         return
@@ -483,7 +483,7 @@ async function run() {
       ['*']
     ),
     countGitCommit(),
-    collectAuthorCommitMsg()
+    collectAuthorCommitMsg(repoPath)
   ]).then(data => {
     // 词云与commit数量 只保留前20个用户
     const showAuthor = data[1].slice(0, 20).map(d => d.author)
@@ -526,6 +526,8 @@ async function run() {
       // 自动打开
       opn(targetPath + 'index.html')
     })
+  }).catch(error => {
+    console.error('analyze error', error.toString())
   })
 }
 

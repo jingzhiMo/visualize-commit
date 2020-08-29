@@ -53,7 +53,7 @@ const mergeSplitData = (baseData, addData) => {
   return baseData
 }
 
-const collectAuthorCommitMsg = async () => {
+const collectAuthorCommitMsg = async (cwd) => {
   const command = spawn(
     `git`,
     // <vsz /> 是用于唯一标识分行的分隔符
@@ -63,7 +63,7 @@ const collectAuthorCommitMsg = async () => {
       `--no-merges`
     ],
     {
-      cwd: "./"
+      cwd: cwd.slice(0, -1)
     }
   )
 
