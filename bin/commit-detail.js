@@ -1,6 +1,6 @@
 const { spawn } = require('child_process')
 const nodejieba = require('nodejieba')
-const { BLACK_LIST } = require('./const')
+const { BLACK_LIST } = require('../src/const')
 
 // 特殊字符
 const specialStringPattern = /[~!@#$%^&*()_\-+=`\[\]{}|\\;:'",<.>\/?～！@¥（）——「」【】、；：‘“”’《》，。？]+/g

@@ -1,5 +1,5 @@
 const { spawn } = require('child_process')
-const { BLACK_LIST } = require('./const')
+const { BLACK_LIST } = require('../src/const')
 
 // 统计每个 commit 的时间
 const collectTime = (cwd) => {
