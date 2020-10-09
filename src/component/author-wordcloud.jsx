@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Select from 'antd/es/select'
 import Echarts from './echarts.jsx'
 import { wordcloud } from '../service/echarts-wordcloud'
+import { authorMap } from '../const'
 
 const { Option } = Select
 
@@ -11,9 +12,6 @@ function AuthorWordCloud ({ data }) {
     ...Object.keys(data).filter(name => name !== 'all')
   ]
   const [selectAuthor, setSelectAuthor] = useState(author[0]) // 默认选中所有人
-  const authorMap = {
-    all: '所有人'
-  }
 
   const updateSelect = value => {
     setSelectAuthor(value)
