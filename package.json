@@ -20,6 +20,7 @@
   "dependencies": {
     "commander": "^6.0.0",
     "fs-extra": "^8.1.0",
+    "lodash": "^4.17.20",
     "nodejieba": "^2.4.1",
     "open": "^7.0.3"
   },
