@@ -6,10 +6,11 @@ import Echarts from './component/echarts.jsx'
 import AuthorFile from './component/author-file.jsx'
 import AuthorWordCloud from './component/author-wordcloud.jsx'
 import CommitPane from './component/commit-pane.jsx'
+import CommitTimePane from './component/commit-time'
 import { pie } from './service/echarts-pie'
 import treeContext from './context/tree-context'
 
-const { codeData, commitData, wordCloudData } = window._source
+const { codeData, commitData, wordCloudData, commitTime } = window._source
 
 /**
  *  @desc  深度优先查找文件
@@ -174,6 +175,7 @@ function App() {
         />
       </div>
       <CommitPane commit={commitData} line={codeData.contribution} />
+      <CommitTimePane data={commitTime} />
       <AuthorFile data={treeData} />
       <AuthorWordCloud data={wordCloudData} />
     </main>

@@ -1,10 +1,6 @@
 const { spawn } = require('child_process')
 const nodejieba = require('nodejieba')
-
-// 不需要统计的作者
-const BLACK_LIST = [
-  'dependabot[bot]'
-]
+const { BLACK_LIST } = require('../src/const')
 
 // 特殊字符
 const specialStringPattern = /[~!@#$%^&*()_\-+=`\[\]{}|\\;:'",<.>\/?～！@¥（）——「」【】、；：‘“”’《》，。？]+/g
@@ -115,7 +111,6 @@ const collectAuthorCommitMsg = async (cwd) => {
     })
   })
 }
-
 
 module.exports = {
   collectAuthorCommitMsg

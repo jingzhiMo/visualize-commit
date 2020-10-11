@@ -6,6 +6,7 @@ const { program } = require('commander')
 const { exec, spawn } = require('child_process')
 const copyFolder = require('fs-extra').copySync
 const { collectAuthorCommitMsg } = require('./commit-detail')
+const collectTime = require('./commit-time')
 
 // 当前执行的路径
 const CURRENT_PATH = process.cwd()
@@ -483,7 +484,8 @@ async function run() {
       ['*']
     ),
     countGitCommit(),
-    collectAuthorCommitMsg(repoPath)
+    collectAuthorCommitMsg(repoPath),
+    collectTime(repoPath),
   ]).then(data => {
     // 词云与commit数量 只保留前20个用户
     const showAuthor = data[1].slice(0, 20).map(d => d.author)
@@ -495,7 +497,8 @@ async function run() {
     let summary = {
       codeData: data[0],
       commitData: data[1].slice(0, 20),
-      wordCloudData
+      wordCloudData,
+      commitTime: data[3]
     }
 
     let json = 'window._source = ' + JSON.stringify(summary, null, 2)
